@@ -1,0 +1,36 @@
+version: '3'
+services: 
+    nginx:
+        image: xnginx:maccms-10
+        ports: 
+            - 8078:80
+        environment: 
+            - NGINX_WORKSPACE_ROOT=/var/www/html
+            - NGINX_PHP_FPM_HOST=maccms
+        volumes: 
+            - maccms:/var/www/html
+        depends_on: 
+            - maccms
+    maccms:
+        image: maccms:10-php7.4.2-fpm-alpine
+        depends_on: 
+            - db_mysql
+        volumes: 
+            - maccms:/var/www/html
+    db_mysql:
+        image: mysql:8
+        volumes: 
+            - db:/var/lib/mysql
+        environment: 
+            - MYSQL_ROOT_PASSWORD=maccms
+            - MYSQL_USER=maccms
+            - MYSQL_PASSWORD=maccms
+            - MYSQL_DATABASE=maccms
+        command: [
+            "--default-authentication-plugin=mysql_native_password",
+            "--character-set-server=utf8mb4",
+            "--collation-server=utf8mb4_unicode_ci"
+        ]
+volumes: 
+    maccms: {}
+    db: {}
