@@ -1,7 +1,7 @@
 version: '3'
 services: 
     nginx:
-        image: xnginx:maccms-10
+        image: registry.cn-hangzhou.aliyuncs.com/esiran/xnginx:maccms-10
         ports: 
             - 8078:80
         environment: 
@@ -12,7 +12,7 @@ services:
         depends_on: 
             - maccms
     maccms:
-        image: maccms:10-php7.4.2-fpm-alpine
+        image: registry.cn-hangzhou.aliyuncs.com/esiran/maccms:10
         depends_on: 
             - db_mysql
         volumes: 
