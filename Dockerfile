@@ -1,4 +1,6 @@
-FROM php:7.4.2-fpm-alpine
+FROM php:7.2.27-fpm-alpine
+
+ENV MACCMS_ADMIN_FILENAME=admin.php
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
@@ -7,10 +9,10 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
   libjpeg-turbo-dev \
   freetype-dev \
   libzip-dev \
-  libpng-dev \
+  libpng-dev \  
   curl-dev \
   libjpeg-turbo-dev && \
-  docker-php-ext-configure gd --with-freetype --with-jpeg && \
+  docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr && \
   docker-php-ext-install -j "$(nproc)" gd \
   bcmath \
   exif \
@@ -19,9 +21,11 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
   pdo_mysql \
   zip \
   curl
-  # apk del --no-cache .build-deps
 
+COPY php-sg-install.sh /usr/local/bin
+RUN php-sg-install.sh
+COPY docker-entrypoint.sh /usr/local/bin
+ENTRYPOINT [ "docker-entrypoint.sh" ] 
 COPY . /var/www/html
-
-RUN chown www-data:www-data -R /var/www/html/ && \
-  mv /var/www/html/admin.php /var/www/html/control.php
+RUN chown www-data:www-data -R /var/www/html
+CMD ["php-fpm"]
