@@ -26,7 +26,5 @@ COPY php-sg-install.sh /usr/local/bin
 RUN php-sg-install.sh
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT [ "docker-entrypoint.sh" ] 
-# COPY . /var/www/html
-ADD maccms-10.1.2.tar.gz .
-RUN chown www-data:www-data -R /var/www/html
+COPY --chown=www-data:www-data . /var/www/html
 CMD ["php-fpm"]
