@@ -1,0 +1,39 @@
+version: '3'
+services: 
+    nginx:
+        image: registry.cn-hangzhou.aliyuncs.com/esiran/xnginx:maccms
+        ports: 
+            - 8078:80
+        environment: 
+            - NGINX_WORKSPACE_ROOT=/var/www/html
+            - NGINX_PHP_FPM_HOST=maccms
+            - MACCMS_ADMIN_FILENAME=control.php
+        volumes: 
+            - maccms:/var/www/html
+        depends_on: 
+            - maccms
+    maccms:
+        build: .
+        depends_on: 
+            - db_mysql
+        environment: 
+            - MACCMS_ADMIN_FILENAME=control.php
+        volumes: 
+            - maccms:/var/www/html
+    db_mysql:
+        image: mysql:8
+        volumes: 
+            - db:/var/lib/mysql
+        environment: 
+            - MYSQL_ROOT_PASSWORD=maccms
+            - MYSQL_USER=maccms
+            - MYSQL_PASSWORD=maccms
+            - MYSQL_DATABASE=maccms
+        command: [
+            "--default-authentication-plugin=mysql_native_password",
+            "--character-set-server=utf8mb4",
+            "--collation-server=utf8mb4_unicode_ci"
+        ]
+volumes: 
+    maccms: {}
+    db: {}
